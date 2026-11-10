@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>Nouifla Studio</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#121d30;--panel2:#19263c;--line:#293952;--txt:#f4f7fb;--muted:#aab8ca;--blue:#3988ff;--cyan:#39d3d0}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(140deg,#0b1220,#101b2e);color:var(--txt);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:18px 5%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);position:sticky;top:0;background:#0b1220ee;backdrop-filter:blur(12px);z-index:2}
+.brand{font-size:25px;font-weight:850;letter-spacing:.5px}.brand span{color:var(--cyan)}.tag{color:var(--muted);font-size:12px}
+main{max-width:1100px;margin:26px auto;padding:0 16px}.hero{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:22px}.hero h1{font-size:clamp(24px,4vw,36px);margin:0 0 7px}.hero p{color:var(--muted);margin:0}
+.btn{border:0;border-radius:12px;padding:12px 17px;font-weight:750;cursor:pointer;background:var(--blue);color:white}.btn.secondary{background:var(--panel2);border:1px solid var(--line)}.btn:disabled{opacity:.45;cursor:not-allowed}
+.layout{display:grid;grid-template-columns:1.3fr .8fr;gap:16px}.panel{background:linear-gradient(150deg,var(--panel),#101a2a);border:1px solid var(--line);border-radius:18px;padding:17px;min-width:0}.panel h2{font-size:17px;margin:0 0 14px}
+.preview{aspect-ratio:16/9;background:#050a12;border:1px dashed #40536e;border-radius:14px;display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--muted);position:relative}.preview img,.preview video{width:100%;height:100%;object-fit:contain}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.drop{border:1px dashed #48617f;padding:16px;border-radius:13px;text-align:center;color:var(--muted);margin-bottom:12px}.drop input{display:block;width:100%;margin-top:10px;color:var(--muted)}
+.media-list{display:grid;gap:8px;max-height:220px;overflow:auto}.media-item{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--panel2);padding:9px 11px;border-radius:10px;font-size:13px}.media-item small{color:var(--muted)}
+.settings{display:grid;grid-template-columns:1fr 1fr;gap:10px}.settings label{font-size:12px;color:var(--muted)}select{width:100%;margin-top:6px;padding:10px;border-radius:10px;background:#0c1626;color:white;border:1px solid var(--line)}
+.timeline{margin-top:16px}.track{height:54px;background:#0b1422;border:1px solid var(--line);border-radius:11px;padding:8px;display:flex;gap:7px;overflow:auto;align-items:center}.clip{min-width:95px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:#234b78;border:1px solid #3e80bd;border-radius:8px;padding:9px;font-size:12px}
+.status{font-size:12px;color:var(--muted);margin-top:12px;min-height:18px}.foot{text-align:center;color:var(--muted);font-size:12px;padding:25px}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.hero{align-items:flex-start;flex-direction:column}header{padding:14px 16px}}
+</style>
+</head>
+<body>
+<header><div><div class="brand">Nouifla<span>.</span></div><div class="tag">VIDEO STUDIO · النسخة التجريبية</div></div><span class="tag">1080p Ready</span></header>
+<main>
+<section class="hero"><div><h1>صايب الفيديو ديالك بطريقتك</h1><p>جمع الصور والفيديوهات والموسيقى فمشروع واحد.</p></div><button class="btn" id="addTop">＋ إضافة الوسائط</button></section>
+<div class="layout">
+<section class="panel">
+<h2>معاينة المشروع</h2>
+<div class="preview" id="preview"><span>أضف صورة أو فيديو باش تبدا المعاينة</span></div>
+<div class="actions"><button class="btn secondary" id="prevBtn">السابق</button><button class="btn secondary" id="nextBtn">التالي</button><button class="btn secondary" id="clearBtn">مسح المشروع</button></div>
+<div class="timeline"><h2 style="margin-top:20px">المسار الزمني</h2><div class="track" id="timeline"><span class="tag">الوسائط ديالك غادي تبان هنا</span></div></div>
+</section>
+<aside class="panel">
+<h2>ملفات المشروع</h2>
+<div class="drop">اختار الصور والفيديوهات والموسيقى
+<input id="files" type="file" accept="image/*,video/*,audio/*" multiple>
+</div>
+<div class="media-list" id="mediaList"><span class="tag">مازال ما زدتي حتى ملف.</span></div>
+<h2 style="margin-top:20px">إعدادات التصدير</h2>
+<div class="settings">
+<label>جودة الفيديو<select id="quality"><option value="1920x1080">Full HD · 1080p</option><option value="1280x720">HD · 720p</option></select></label>
+<label>الصيغة<select id="format"><option value="webm">WebM (تجريبي)</option></select></label>
+</div>
+<div class="actions"><button class="btn" id="exportBtn" disabled>تصدير تجريبي</button></div>
+<div class="status" id="status">ملاحظة: هادي نسخة أولية؛ التصدير التجريبي كيدعم عرض صورة ثابتة داخل WebM حسب دعم المتصفح.</div>
+</aside>
+</div>
+</main>
+<div class="foot">Nouifla Studio · مشروع أولي قابل للتطوير · جميع الحقوق محفوظة</div>
+<script>
+const $=id=>document.getElementById(id);
+let items=[], index=0, urls=[];
+function say(t){$('status').textContent=t}
+function render(){
+  $('mediaList').innerHTML=''; $('timeline').innerHTML='';
+  if(!items.length){$('mediaList').innerHTML='<span class="tag">مازال ما زدتي حتى ملف.</span>';$('timeline').innerHTML='<span class="tag">الوسائط ديالك غادي تبان هنا</span>';$('preview').innerHTML='<span>أضف صورة أو فيديو باش تبدا المعاينة</span>';$('exportBtn').disabled=true;return}
+  items.forEach((it,i)=>{
+    const row=document.createElement('div');row.className='media-item';
+    const name=document.createElement('span');name.textContent=(i+1)+'. '+it.file.name;
+    const type=document.createElement('small');type.textContent=it.kind==='audio'?'صوت':it.kind==='video'?'فيديو':'صورة';
+    row.append(name,type);row.onclick=()=>{index=i;showPreview()};$('mediaList').append(row);
+    if(it.kind!=='audio'){const clip=document.createElement('div');clip.className='clip';clip.textContent=it.file.name;$('timeline').append(clip)}
+  });
+  $('exportBtn').disabled=!items.some(x=>x.kind!=='audio');showPreview();
+}
+function showPreview(){
+ const it=items[index];if(!it)return;
+ if(it.kind==='audio'){$('preview').innerHTML='<span>ملف صوتي: '+escapeHtml(it.file.name)+'</span>';return}
+ const el=document.createElement(it.kind==='video'?'video':'img');el.src=it.url;
+ if(it.kind==='video'){el.controls=true;el.playsInline=true}
+ $('preview').replaceChildren(el);
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+$('files').addEventListener('change',e=>{
+ for(const file of e.target.files){const kind=file.type.startsWith('image/')?'image':file.type.startsWith('video/')?'video':file.type.startsWith('audio/')?'audio':null;if(!kind)continue;const url=URL.createObjectURL(file);urls.push(url);items.push({file,kind,url})}
+ index=0;render();say('تزادو الملفات بنجاح. اختار أي ملف من اللائحة باش تشوفو.');e.target.value='';
+});
+$('addTop').onclick=()=>$('files').click();
+$('prevBtn').onclick=()=>{if(items.length){index=(index-1+items.length)%items.length;showPreview()}};
+$('nextBtn').onclick=()=>{if(items.length){index=(index+1)%items.length;showPreview()}};
+$('clearBtn').onclick=()=>{urls.forEach(URL.revokeObjectURL);urls=[];items=[];index=0;render();say('تم مسح المشروع من هاد الصفحة.')};
+$('exportBtn').onclick=async()=>{
+ const it=items[index];if(!it||it.kind!=='image'){say('فالتجربة الحالية اختار صورة أولاً للتصدير التجريبي.');return}
+ if(!window.MediaRecorder){say('المتصفح ديالك ما كيدعمش التصدير التجريبي.');return}
+ const [w,h]=$('quality').value.split('x').map(Number),canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+ const ctx=canvas.getContext('2d'),img=new Image();img.src=it.url;
+ await new Promise((ok,no)=>{img.onload=ok;img.onerror=no});
+ ctx.fillStyle='#000';ctx.fillRect(0,0,w,h);const scale=Math.min(w/img.width,h/img.height);ctx.drawImage(img,(w-img.width*scale)/2,(h-img.height*scale)/2,img.width*scale,img.height*scale);
+ const stream=canvas.captureStream(1),rec=new MediaRecorder(stream,{mimeType:'video/webm'}),chunks=[];
+ rec.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+ rec.onstop=()=>{const blob=new Blob(chunks,{type:'video/webm'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='nouifla-preview.webm';a.click();say('وجدنا ملف WebM تجريبي بصورة ثابتة. هادشي مازال ماشي محرر فيديو كامل.')};
+ rec.start();setTimeout(()=>rec.stop(),1500);say('كنوجد التصدير التجريبي...');
+};
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script>
+</body></html>
